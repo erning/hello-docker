@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+    hello-vue:
+        build: ./hello-vue
+        image: hello-vue
+        command: npm run dev
+        environment: 
+            - BACKEND_API=http://hello-echo:5000
+            - PORT=8000
+        expose: 
+            - 8000
+        ports:
+            - 8000:8000
+        volumes:
+            - ./hello-vue:/src
+            - /src/node_modules
+        depends_on:
+            - hello-echo
+    hello-echo:
+        build: ./hello-echo
+        image: hello-echo
+        command: go run server/main.go
+        expose:
+            - 5000
+        ports:
+            - 5000:5000
+        volumes:
+            - ./hello-echo:/go/src/github.com/erning/hello-echo
